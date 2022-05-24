@@ -7,5 +7,42 @@
 	<script src="script.js"></script>
 </head>
 <body>
+	<div class="header">
+		<div class="user">
+			<img src="img/user.png">
+		</div>
+		<div class="search">
+			<img src="img/search.png">
+			<input type="text" placeholder="Поиск">
+		</div>
+	</div>
+	<div class="menu">
+		<input id="menu_btn_today" type="button" value="Сегодня">
+		<input id="menu_btn_week" type="button" value="На неделю">
+		<div id="menu_datepicker"></div>
+		<input id="menu_cb_unfulfilled" type="checkbox">
+		<label for="menu_cb_unfulfilled">Только не выполненные</label>
+	</div>
+	<div class="list">
+		<div id="list_date">8 мая 2022</div>
+		<div class="list_sort">
+			<div>Сортировать по дате</div>
+			<img src="img/sort.png">
+		</div>
+		<div id="list_container">
+
+			<!-- Test { -->
+			<div class="task">
+				<div class="task_name">Бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла
+					бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла</div>
+				<div class="task_description">Бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла
+					бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла</div>
+				<input type="checkbox" class="task_check">
+				<div class="task_date">08.05.2022 00:10</div>
+			</div>
+			<!-- } -->
+
+		</div>
+	</div>
 </body>
 </html>
