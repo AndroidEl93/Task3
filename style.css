@@ -94,10 +94,8 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
 
 #menu_datepicker {
     position: relative;
-    width: calc(100% - 20px);
-    height: 200px;
     margin: 10px;
-    background-color: 82F260;
+    background-color: mediumorchid;
 }
 
 #menu_cb_unfulfilled {
