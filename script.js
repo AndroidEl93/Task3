@@ -1,5 +1,5 @@
-var allTasks = null; //Полный список задач
-var currentTasks = null; //Список отображаемых задач
+var allTasks = []; //Полный список задач
+var currentTasks = []; //Список отображаемых задач
 
 //Функция вычисляет и присваивает timestamp каждой задаче списка tasks
 function setTasksTimestamp(tasks) {
@@ -90,6 +90,11 @@ $(function() {
         if (e.which == '13') {
             showBySearch($("#search").val());
         }
+    });
+
+    //Отображаем задачи на сегодня
+    $("#menu_btn_today").click(function(e) {
+        showByDate(new Date());
     });
 
     //У меня не получилось напрямую из JS получить данные с сервера api, пытался долго и безрезультатно.
