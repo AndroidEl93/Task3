@@ -81,15 +81,20 @@ function showBySearch(request) {
 
 //Отображение на странице задач из списка tasks
 function showTasks(tasks) {
+    //Включен ли режим "Только невыполненные"
+    let onlyUnfulfilledTasks = $("#menu_cb_unfulfilled").is(':checked');
+
     $('#list_container').html("");
     for (let i = 0; i < tasks.length; i++) {
-        let task = $('<div></div>').attr("class","task");
-        task.append($('<div></div>').attr("class","task_name").text(tasks[i]['name']));
-        task.append($('<div></div>').attr("class","task_description").text(tasks[i]['shortDesc']));
-        task.append($('<div></div>').attr("class","task_date").text(tasks[i]['date']));
-        task.append($('<input>').attr("type","checkbox").attr("class","task_check").attr("checked",tasks[i]['status']));
-
-        $('#list_container').append(task);
+        //Показывать задачи либо если они не выполнены, либо если не включен режим "Только невыполненные"
+        if (!tasks[i]['status'] || !onlyUnfulfilledTasks) {
+            let task = $('<div></div>').attr("class","task");
+            task.append($('<div></div>').attr("class","task_name").text(tasks[i]['name']));
+            task.append($('<div></div>').attr("class","task_description").text(tasks[i]['shortDesc']));
+            task.append($('<div></div>').attr("class","task_date").text(tasks[i]['date']));
+            task.append($('<input>').attr("type","checkbox").attr("class","task_check").attr("checked",tasks[i]['status']));
+            $('#list_container').append(task);
+        }
     }
 }
 
@@ -132,6 +137,11 @@ $(function() {
     //Сортировка задач по времени
     $("#list_sort").click(function(e) {
        sortTasks(currentTasks);
+    });
+
+    //При смене флажка "Только не выполненные" обновляем список задач
+    $("#menu_cb_unfulfilled").change(function(e) {
+        showTasks(currentTasks);
     });
 
     //У меня не получилось напрямую из JS получить данные с сервера api, пытался долго и безрезультатно.
