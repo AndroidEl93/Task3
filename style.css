@@ -98,7 +98,7 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     background-color: mediumorchid;
 }
 
-#menu_cb_unfulfilled {
+.menu input[type='checkbox'] {
     margin: 10px;
 }
 

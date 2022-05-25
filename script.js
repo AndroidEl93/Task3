@@ -125,11 +125,17 @@ function openTask(i) {
 $(function() {
     //Установка календаря
     $("#menu_datepicker").datepicker({
+        range: "",
+        range_multiple_max: 3,
         //При смете даты в календаре
-        onSelect: function(dateText, inst) {
-            //Отображаем задачи на выбранный в календаре день
-            showByDate(new Date(dateText));
-          }
+        onSelect: function(dateText, inst, extensionRange) {
+            //Отображаем задачи на выбранный в календаре день/дни
+            if (extensionRange != undefined) {//Множественный выбор
+                showByDatesRange(new Date(extensionRange.startDateText), new Date(extensionRange.endDateText));
+            } else {//Одиночный выбор
+                showByDate(new Date(dateText));
+            }
+        }
     });
 
     $("#search").keypress(function(e) {
@@ -141,7 +147,8 @@ $(function() {
 
     //Отображаем задачи на сегодня
     $("#menu_btn_today").click(function(e) {
-       showByDate(new Date());
+        $("#menu_datepicker").datepicker("setDate", new Date());
+        showByDate(new Date());
     });
 
     //Отображаем задачи на неделю
@@ -149,6 +156,7 @@ $(function() {
         let today = new Date();
         let day = today.getDay();
         let firstDay = today.getDate() - day + (day == 0 ? -6 : 1);
+        $("#menu_datepicker").datepicker("setDate", new Date());
         showByDatesRange(new Date(today.setDate(firstDay)), new Date(today.setDate(firstDay+6)));
     });
 
@@ -160,6 +168,15 @@ $(function() {
     //При смене флажка "Только не выполненные" обновляем список задач
     $("#menu_cb_unfulfilled").change(function(e) {
         showTasks(currentTasks);
+    });
+
+    //При смене флажка "Выбор диапазона дат" меняем режим datepicker-а
+    $("#menu_cb_period").change(function(e) {
+        if ($("#menu_cb_period").is(':checked')) {
+            $("#menu_datepicker").datepicker("option","range","period");
+        } else {
+            $("#menu_datepicker").datepicker("option","range","");
+        }
     });
 
     //У меня не получилось напрямую из JS получить данные с сервера api, пытался долго и безрезультатно.
