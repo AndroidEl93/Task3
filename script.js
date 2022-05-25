@@ -92,18 +92,25 @@ function showTasks(tasks) {
             cnt++;
             let task = $('<div></div>')
                 .attr("class","task")
-                .attr("id", "task_" + i)
+                .attr("id", "task_" + i);
+            let taskC = $('<div></div>')
+                .attr("class","task_c")
                 .attr("onclick","openTask(" + i + ");");
-            task.append($('<div></div>').attr("class","task_name").text(tasks[i]['name']));
-            task.append($('<div></div>')
+            taskC.append($('<div></div>').attr("class","task_name").text(tasks[i]['name']));
+            taskC.append($('<div></div>')
                 .attr("id","task_description_" + i)
                 .attr("class","task_description")
                 .text(tasks[i]['shortDesc']));
-            task.append($('<div></div>').attr("class","task_date").text(
+            taskC.append($('<div></div>').attr("class","task_date").text(
                 new Intl.DateTimeFormat('ru-RU', {month:'numeric', day:'numeric', year: 'numeric', hour: 'numeric',
                     minute: 'numeric', second: 'numeric'}).format(new Date(tasks[i]['date']))
             ));
-            task.append($('<input>').attr("type","checkbox").attr("class","task_check").attr("checked",tasks[i]['status']));
+            task.append(taskC);
+            task.append($('<input>')
+                .attr("type","checkbox")
+                .attr("class","task_check")
+                .attr("checked",tasks[i]['status']))
+                .off('click');
             $('#list_container').append(task);
         }
     }
