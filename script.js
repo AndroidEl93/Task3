@@ -12,12 +12,19 @@ function setTasksTimestamp(tasks) {
 //date - Объект Date, хранящий дату по которой осуществляется отбор задач
 //source - Исходный массив задач
 //return - Отфильтрованый по дате список задач
-function filterTasksByDay(date, source) {
+function filterTasksByDay(dateFrom, dateTo, source) {
     let tasks = [];
-    date.setHours(0, 0, 0, 0);
-    let todayFrom = date.getTime();
-    date.setHours(23, 59, 59, 999);
-    let todayTo = date.getTime();
+    dateFrom.setHours(0, 0, 0, 0);
+    let todayFrom = dateFrom.getTime();
+
+    let todayTo;
+    if (dateTo == null) {
+        dateFrom.setHours(23, 59, 59, 999);
+        todayTo = dateFrom.getTime();
+    } else {
+        dateTo.setHours(23, 59, 59, 999);
+        todayTo = dateTo.getTime();
+    }
 
     for (let i = 0; i < source.length; i++) {
         if ((source[i]['timestamp'] >= todayFrom) && (source[i]['timestamp'] <= todayTo)) {
@@ -47,8 +54,19 @@ function showByDate(date) {
     //Сменить текст текущей даты
     $("#list_date").text(new Intl.DateTimeFormat('ru-RU', {month:'long', day:'numeric', year: 'numeric'}).format(date));
     //Отфильтровываем список задач на сегодня
-    currentTasks = filterTasksByDay(date, allTasks);
+    currentTasks = filterTasksByDay(date, null, allTasks);
     //И отображаем их
+    showTasks(currentTasks);
+}
+
+//Функция отображает информацию для диапазона дат
+//dateFrom, dateTo - объекты Date
+function showByDatesRange(dateFrom, dateTo) {
+    $("#list_date").text("Диапазон дат: " +
+        new Intl.DateTimeFormat('ru-RU', {month:'long', day:'numeric', year: 'numeric'}).format(dateFrom) +
+        " - " +
+        new Intl.DateTimeFormat('ru-RU', {month:'long', day:'numeric', year: 'numeric'}).format(dateTo));
+    currentTasks = filterTasksByDay(dateFrom, dateTo, allTasks);
     showTasks(currentTasks);
 }
 
@@ -95,6 +113,14 @@ $(function() {
     //Отображаем задачи на сегодня
     $("#menu_btn_today").click(function(e) {
         showByDate(new Date());
+    });
+
+    //Отображаем задачи на неделю
+    $("#menu_btn_week").click(function(e) {
+        let today = new Date();
+        let day = today.getDay();
+        let firstDay = today.getDate() - day + (day == 0 ? -6 : 1);
+        showByDatesRange(new Date(today.setDate(firstDay)), new Date(today.setDate(firstDay+6)));
     });
 
     //У меня не получилось напрямую из JS получить данные с сервера api, пытался долго и безрезультатно.
