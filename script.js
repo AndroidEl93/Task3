@@ -4,7 +4,7 @@ var currentTasks = []; //Список отображаемых задач
 //Функция вычисляет и присваивает timestamp каждой задаче списка tasks
 function setTasksTimestamp(tasks) {
     for (let i = 0; i < tasks.length; i++) {
-        tasks[i]['timestamp'] = new Date(tasks[i]['date']).getTime();
+        tasks[i]['timestamp'] = new Date(tasks[i]['date'].slice(0, 23)).getTime();
     }
 }
 
@@ -93,6 +93,12 @@ function showTasks(tasks) {
     }
 }
 
+//Сортировка списка задач source
+function sortTasks(source) {
+    source.sort((a, b) => (a['timestamp'] > b['timestamp']) ? 1 : -1);
+    showTasks(source);
+}
+
 $(function() {
     //Установка календаря
     $("#menu_datepicker").datepicker({
@@ -112,7 +118,7 @@ $(function() {
 
     //Отображаем задачи на сегодня
     $("#menu_btn_today").click(function(e) {
-        showByDate(new Date());
+       showByDate(new Date());
     });
 
     //Отображаем задачи на неделю
@@ -121,6 +127,11 @@ $(function() {
         let day = today.getDay();
         let firstDay = today.getDate() - day + (day == 0 ? -6 : 1);
         showByDatesRange(new Date(today.setDate(firstDay)), new Date(today.setDate(firstDay+6)));
+    });
+
+    //Сортировка задач по времени
+    $("#list_sort").click(function(e) {
+       sortTasks(currentTasks);
     });
 
     //У меня не получилось напрямую из JS получить данные с сервера api, пытался долго и безрезультатно.
