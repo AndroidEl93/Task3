@@ -195,6 +195,8 @@ $(function() {
             allTasks = res;
             //Для всех задач вычисляю timestamp, мне кажется с ним удобнее и быстрее работать
             setTasksTimestamp(allTasks);
+            //Скрываем спинер
+            $("#spinner").hide();
             //Отображаем задачи на сегодня
             showByDate(new Date());
         },
