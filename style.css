@@ -162,6 +162,10 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     background-color: #82F260;
 }
 
+.opentask {
+    height: 200px;
+}
+
 .task_name {
     position: absolute;
     left: 10px;
@@ -181,6 +185,13 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.opentask .task_description {
+    right: 150px;
+    height: 140px;
+    white-space: inherit;
+    overflow-y: auto;
+    text-overflow: inherit;
 }
 
 .task_date {

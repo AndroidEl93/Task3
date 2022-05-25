@@ -88,10 +88,19 @@ function showTasks(tasks) {
     for (let i = 0; i < tasks.length; i++) {
         //Показывать задачи либо если они не выполнены, либо если не включен режим "Только невыполненные"
         if (!tasks[i]['status'] || !onlyUnfulfilledTasks) {
-            let task = $('<div></div>').attr("class","task");
+            let task = $('<div></div>')
+                .attr("class","task")
+                .attr("id", "task_" + i)
+                .attr("onclick","openTask(" + i + ");");
             task.append($('<div></div>').attr("class","task_name").text(tasks[i]['name']));
-            task.append($('<div></div>').attr("class","task_description").text(tasks[i]['shortDesc']));
-            task.append($('<div></div>').attr("class","task_date").text(tasks[i]['date']));
+            task.append($('<div></div>')
+                .attr("id","task_description_" + i)
+                .attr("class","task_description")
+                .text(tasks[i]['shortDesc']));
+            task.append($('<div></div>').attr("class","task_date").text(
+                new Intl.DateTimeFormat('ru-RU', {month:'numeric', day:'numeric', year: 'numeric', hour: 'numeric',
+                    minute: 'numeric', second: 'numeric'}).format(new Date(tasks[i]['date']))
+            ));
             task.append($('<input>').attr("type","checkbox").attr("class","task_check").attr("checked",tasks[i]['status']));
             $('#list_container').append(task);
         }
@@ -102,6 +111,15 @@ function showTasks(tasks) {
 function sortTasks(source) {
     source.sort((a, b) => (a['timestamp'] > b['timestamp']) ? 1 : -1);
     showTasks(source);
+}
+
+//Раскрытие / сворачивания задачи
+function openTask(i) {
+    if ($("#task_"+i).hasClass("opentask")) {
+        $("#task_"+i).removeClass("opentask");
+    } else {
+        $("#task_"+i).addClass("opentask");
+    }
 }
 
 $(function() {
