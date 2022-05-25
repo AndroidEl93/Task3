@@ -27,6 +27,20 @@ function filterTasksByDay(date, source) {
     return tasks;
 }
 
+//Функция возвращает отфильтрованный список задач по совпадению в названии
+//text - Строка, по нахождению которой в названии задач, осуществляется отбор
+//source - Исходный массив задач
+//return - Отфильтрованый по дате список задач
+function filterTasksByName(text, source) {
+    let tasks = [];
+    for (let i = 0; i < source.length; i++) {
+        if (( (source[i]['name'].toLowerCase()).indexOf(text.toLowerCase()) ) != -1) {
+            tasks.push(source[i]);
+        }
+    }
+    return tasks;
+}
+
 //Функция отображает информацию для выбранного дня
 //date - объект Date.
 function showByDate(date) {
@@ -34,6 +48,15 @@ function showByDate(date) {
     $("#list_date").text(new Intl.DateTimeFormat('ru-RU', {month:'long', day:'numeric', year: 'numeric'}).format(date));
     //Отфильтровываем список задач на сегодня
     currentTasks = filterTasksByDay(date, allTasks);
+    //И отображаем их
+    showTasks(currentTasks);
+}
+
+//Функция отображает информацию по поиску
+function showBySearch(request) {
+    $("#list_date").text("Поиск по запросу: \""+request+"\"");
+    //Отфильтровываем список задач на сегодня
+    currentTasks = filterTasksByName(request, allTasks);
     //И отображаем их
     showTasks(currentTasks);
 }
@@ -60,6 +83,13 @@ $(function() {
             //Отображаем задачи на выбранный в календаре день
             showByDate(new Date(dateText));
           }
+    });
+
+    $("#search").keypress(function(e) {
+        //При нажатии клавиши enter на строке поиска, отображаем задачи названия которых содержат текст запроса
+        if (e.which == '13') {
+            showBySearch($("#search").val());
+        }
     });
 
     //У меня не получилось напрямую из JS получить данные с сервера api, пытался долго и безрезультатно.
