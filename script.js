@@ -84,10 +84,12 @@ function showTasks(tasks) {
     //Включен ли режим "Только невыполненные"
     let onlyUnfulfilledTasks = $("#menu_cb_unfulfilled").is(':checked');
 
+    let cnt=0;
     $('#list_container').html("");
     for (let i = 0; i < tasks.length; i++) {
         //Показывать задачи либо если они не выполнены, либо если не включен режим "Только невыполненные"
         if (!tasks[i]['status'] || !onlyUnfulfilledTasks) {
+            cnt++;
             let task = $('<div></div>')
                 .attr("class","task")
                 .attr("id", "task_" + i)
@@ -105,6 +107,7 @@ function showTasks(tasks) {
             $('#list_container').append(task);
         }
     }
+    if (cnt == 0) { $('#list_container').append("<p>Задач не найдено</p>"); }
 }
 
 //Сортировка списка задач source
@@ -195,8 +198,6 @@ $(function() {
             allTasks = res;
             //Для всех задач вычисляю timestamp, мне кажется с ним удобнее и быстрее работать
             setTasksTimestamp(allTasks);
-            //Скрываем спинер
-            $("#spinner").hide();
             //Отображаем задачи на сегодня
             showByDate(new Date());
         },

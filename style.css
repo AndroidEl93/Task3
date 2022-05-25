@@ -150,6 +150,9 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     bottom: 10px;
     overflow-y: auto;
 }
+#list_container p {
+    margin-left: 10px;
+}
 
 
 
