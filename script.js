@@ -1,17 +1,21 @@
 var allTasks = []; //Полный список задач
 var currentTasks = []; //Список отображаемых задач
 
-//Функция вычисляет и присваивает timestamp каждой задаче списка tasks
+/** Функция вычисляет и присваивает timestamp каждой задаче списка tasks
+ * @param {Object[]} tasks - Список задач
+ */
 function setTasksTimestamp(tasks) {
     for (let i = 0; i < tasks.length; i++) {
         tasks[i]['timestamp'] = new Date(tasks[i]['date'].slice(0, 23)).getTime();
     }
 }
 
-//Функция возвращает отфильтрованный список задач на указаный день
-//date - Объект Date, хранящий дату по которой осуществляется отбор задач
-//source - Исходный массив задач
-//return - Отфильтрованый по дате список задач
+/** Функция возвращает отфильтрованный список задач на указаный диапазон дней
+ * @param {Date} dateFrom - Дата начиная с которой осуществляется отбор задач
+ * @param {Date|null} dateTo - Конечная дата отбора задач (если null то отбор идет по начальной дате dateFrom)
+ * @param {Object[]} source - Исходный список задач
+ * @return {Object[]} Отфильтрованый по дате список задач
+ */
 function filterTasksByDay(dateFrom, dateTo, source) {
     let tasks = [];
     dateFrom.setHours(0, 0, 0, 0);
@@ -34,10 +38,11 @@ function filterTasksByDay(dateFrom, dateTo, source) {
     return tasks;
 }
 
-//Функция возвращает отфильтрованный список задач по совпадению в названии
-//text - Строка, по нахождению которой в названии задач, осуществляется отбор
-//source - Исходный массив задач
-//return - Отфильтрованый по дате список задач
+/** Функция возвращает отфильтрованный список задач по совпадению в названии
+ * @param {Object[]} text - Строка по которой осуществляется отбор задач
+ * @param {Object[]} source - Исходный список задач
+ * @return {Object[]} Отфильтрованый по совпадении в названии список задач
+*/
 function filterTasksByName(text, source) {
     let tasks = [];
     for (let i = 0; i < source.length; i++) {
@@ -48,8 +53,9 @@ function filterTasksByName(text, source) {
     return tasks;
 }
 
-//Функция отображает информацию для выбранного дня
-//date - объект Date.
+/** Функция отображает задачи и заголовок для выбранного дня
+ * @param {Date} date - Выбранный день
+ */
 function showByDate(date) {
     //Сменить текст текущей даты
     $("#list_date").text(new Intl.DateTimeFormat('ru-RU', {month:'long', day:'numeric', year: 'numeric'}).format(date));
@@ -59,8 +65,10 @@ function showByDate(date) {
     showTasks(currentTasks);
 }
 
-//Функция отображает информацию для диапазона дат
-//dateFrom, dateTo - объекты Date
+/** Функция отображает задачи и заголовок для диапазона дат
+ * @param {Date} dateFrom - Начальная дата
+ * @param {Date} dateTo - Конечная дата
+ */
 function showByDatesRange(dateFrom, dateTo) {
     $("#list_date").text("Диапазон дат: " +
         new Intl.DateTimeFormat('ru-RU', {month:'long', day:'numeric', year: 'numeric'}).format(dateFrom) +
@@ -70,7 +78,9 @@ function showByDatesRange(dateFrom, dateTo) {
     showTasks(currentTasks);
 }
 
-//Функция отображает информацию по поиску
+/** Функция отображает задачи и заголовок по поисковому запросу
+ * @param {string} request - Поисковой запрос
+ */
 function showBySearch(request) {
     $("#list_date").text("Поиск по запросу: \""+request+"\"");
     //Отфильтровываем список задач на сегодня
@@ -79,7 +89,9 @@ function showBySearch(request) {
     showTasks(currentTasks);
 }
 
-//Отображение на странице задач из списка tasks
+/** Отображение на странице задач из списка tasks
+ * @param {Object[]} tasks - Список задач
+ */
 function showTasks(tasks) {
     //Включен ли режим "Только невыполненные"
     let onlyUnfulfilledTasks = $("#menu_cb_unfulfilled").is(':checked');
@@ -117,13 +129,17 @@ function showTasks(tasks) {
     if (cnt == 0) { $('#list_container').append("<p>Задач не найдено</p>"); }
 }
 
-//Сортировка списка задач source
-function sortTasks(source) {
-    source.sort((a, b) => (a['timestamp'] > b['timestamp']) ? 1 : -1);
-    showTasks(source);
+/** Сортировка списка задач по дате
+ * @param {Object[]} source - Список задач
+ */
+function sortTasks(tasks) {
+    tasks.sort((a, b) => (a['timestamp'] > b['timestamp']) ? 1 : -1);
+    showTasks(tasks);
 }
 
-//Раскрытие / сворачивания задачи
+/** Раскрытие / сворачивание блока задачи
+ * @param {number} i - Номер блока задачи
+ */
 function openTask(i) {
     if ($("#task_"+i).hasClass("opentask")) {
         $("#task_"+i).removeClass("opentask");
