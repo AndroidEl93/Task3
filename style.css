@@ -4,7 +4,6 @@ body {
     margin: 0;
     user-select: none;
 }
-
 input[type='button'] {
     display: block;
     padding: 10px;
@@ -27,8 +26,8 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     width: 100%;
     height: 80px;
     background-color: #9DF279;
+    z-index: 10;
 }
-
 .user {
     position: absolute;
     left: 10px;
@@ -39,12 +38,10 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     overflow: hidden;
     background-color: white;
 }
-
 .user img {
     width: 100%;
     height: 100%;
 }
-
 .search {
     position: absolute;
     left: 300px;
@@ -53,7 +50,6 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     bottom: 10px;
     background-color: white;
 }
-
 .search img {
     position: absolute;
     left: 10px;
@@ -61,7 +57,6 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     width: 40px;
     height: 40px;
 }
-
 .search input {
     position: absolute;
     left: 60px;
@@ -72,6 +67,24 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     background-color: white;
     font-size: 24px;
 }
+.search_s {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border-bottom: 1px solid darkgray;
+}
+.search_s div {
+    position: relative;
+    padding: 10px;
+    text-align: left;
+    border-top: 1px solid darkgray;
+    outline: none;
+}
+.search_s div:hover { background-color: #EEEEEE; }
+.search_s div:focus { background-color: #CCCCCC; }
+.search_s div:active { background-color: #DDDDDD; }
 
 
 
@@ -85,19 +98,16 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     width: 300px;
     background-color: #D0FFBF;
 }
-
 .menu input[type='button'] {
     position: relative;
     width: calc(100% - 20px);
     margin: 10px;
 }
-
 #menu_datepicker {
     position: relative;
     margin: 10px;
     background-color: mediumorchid;
 }
-
 .menu input[type='checkbox'] {
     margin: 10px;
 }
@@ -114,34 +124,29 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     right: 0;
     background-color: #F5FFF2;
 }
-
 #list_date {
     position: absolute;
     left: 40px;
     top: 10px;
 }
-
 .list_sort {
     position: absolute;
     top: 10px;
     right: 40px;
     
 }
-
 .list_sort div {
     position: relative;
     display: inline-block;
     float: right;
     cursor: pointer;
 }
-
 .list_sort img {
     position: relative;
     display: inline-block;
     height: 15px;
     margin: 3px 3px 0 0;
 }
-
 #list_container {
     position: absolute;
     left: 30px;
@@ -164,17 +169,11 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     height: 100px;
     background-color: #82F260;
 }
-
-.opentask {
-    height: 200px;
-}
-
 .task_c {
     position: absolute;
     width: 100%;
     height: 100%;
 }
-
 .task_name {
     position: absolute;
     left: 10px;
@@ -223,6 +222,72 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
 
 
 
+#mod {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    display: none;
+}
+#mod_background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.8;
+}
+#mod_w {
+    position: absolute;
+    left: 30%;
+    top: 10%;
+    width: 40%;
+    height: 80%;
+    background-color: white;
+}
+#mod_w_name {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    right: 70px;
+    font-size: 24px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#mod_w_date {
+    position: absolute;
+    left: 10px;
+    top: 45px;
+    font-size: 14px;
+}
+#mod_w_cb {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 50px;
+    height: 50px;
+}
+#mod_w_description {
+    position: absolute;
+    left: 10px;
+    top: 70px;
+    right: 10px;
+    bottom: 60px;
+    overflow-y: auto;
+    border-top: 2px solid darkgray;
+}
+#mod_w_ok {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    height: 40px;
+}
+
+
+
+
+
 .spinner {
     position: relative;
     display: block;
@@ -231,14 +296,12 @@ input[type='button']:focus { box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     text-align: center;
     color: #82F260;
 }
-
 .spinner:after {
   animation: changeContent .8s linear infinite;
   display: block;
   content: "⠋";
   font-size: 80px;
 }
-
 @keyframes changeContent {
   10% { content: "⠙"; }
   20% { content: "⠹"; }

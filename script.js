@@ -41,13 +41,17 @@ function filterTasksByDay(dateFrom, dateTo, source) {
 /** Функция возвращает отфильтрованный список задач по совпадению в названии
  * @param {Object[]} text - Строка по которой осуществляется отбор задач
  * @param {Object[]} source - Исходный список задач
+ * @param {number|null} limit - Максимальный размер списка отфильтрованых задач (null если ограничение не требуется)
  * @return {Object[]} Отфильтрованый по совпадении в названии список задач
 */
-function filterTasksByName(text, source) {
+function filterTasksByName(text, source, limit) {
     let tasks = [];
+    let cnt = 0;
     for (let i = 0; i < source.length; i++) {
         if (( (source[i]['name'].toLowerCase()).indexOf(text.toLowerCase()) ) != -1) {
             tasks.push(source[i]);
+            cnt++;
+            if (limit != null) { if (cnt >= limit) return tasks; }
         }
     }
     return tasks;
@@ -84,7 +88,7 @@ function showByDatesRange(dateFrom, dateTo) {
 function showBySearch(request) {
     $("#list_date").text("Поиск по запросу: \""+request+"\"");
     //Отфильтровываем список задач на сегодня
-    currentTasks = filterTasksByName(request, allTasks);
+    currentTasks = filterTasksByName(request, allTasks, null);
     //И отображаем их
     showTasks(currentTasks);
 }
@@ -107,7 +111,9 @@ function showTasks(tasks) {
                 .attr("id", "task_" + i);
             let taskC = $('<div></div>')
                 .attr("class","task_c")
-                .attr("onclick","openTask(" + i + ");");
+                .click(function() {
+                    showModal(tasks, i);
+                });
             taskC.append($('<div></div>').attr("class","task_name").text(tasks[i]['name']));
             taskC.append($('<div></div>')
                 .attr("id","task_description_" + i)
@@ -137,14 +143,37 @@ function sortTasks(tasks) {
     showTasks(tasks);
 }
 
-/** Раскрытие / сворачивание блока задачи
- * @param {number} i - Номер блока задачи
+/** Открытие модального окна для задачи
+ * @param {Object[]} source - Список задач
+ * @param {number} i - Индекс задачи в списке
  */
-function openTask(i) {
-    if ($("#task_"+i).hasClass("opentask")) {
-        $("#task_"+i).removeClass("opentask");
-    } else {
-        $("#task_"+i).addClass("opentask");
+function showModal(source, i) {
+    $("#mod_w_name").text(source[i]['name']);
+    $("#mod_w_date").text(
+        new Intl.DateTimeFormat('ru-RU', {month:'numeric', day:'numeric', year: 'numeric', hour: 'numeric',
+                            minute: 'numeric', second: 'numeric'}).format(new Date(source[i]['date']))
+    );
+    $("#mod_w_cb").attr("checked", source[i]['status']);
+    $("#mod_w_description").text(source[i]['fullDesc']);
+    $("#mod").show();
+}
+
+/** Выводит на экран выпадающий список задач, отобраных по поисковому запросу
+ * @param {Object[]} request - Поисковой запрос
+ * @param {Object[]} source - Источник задач
+ * @param {number} limit - Максимальное количество отбираемых задач
+ */
+function showSearchDropdownList(request, source, limit) {
+    let list = filterTasksByName(request, source, limit);
+    $("#search_s").html("");
+    for (let i = 0; i < list.length; i++) {
+        let item = $("<div tabindex='0'>" + list[i]['name'] + "</div>")
+            .keydown(function(e) {
+                if (e.keyCode == 40) { $(document.activeElement).next().focus(); }
+                if (e.keyCode == 38) { $(document.activeElement).prev().focus(); }
+                if (e.keyCode == 13 || e.keyCode == 32) { showModal(list, i); }
+            });
+        $("#search_s").append(item);
     }
 }
 
@@ -164,10 +193,23 @@ $(function() {
         }
     });
 
-    $("#search").keypress(function(e) {
+    $("#search").keydown(function(e) {
         //При нажатии клавиши enter на строке поиска, отображаем задачи названия которых содержат текст запроса
-        if (e.which == '13') {
+        if (e.keyCode == '13') {
             showBySearch($("#search").val());
+        }
+        //При нажатии клавиши "курсор вниз" на строке поиска, переводим фокус на первый элемент выпадающего списка
+        if (e.keyCode == '40') {
+            $("#search_s").children().first().focus();
+        }
+    });
+
+    $("#search").on('input', function(e) {
+        //При вводе в поисковую строку более одного символа, показываем выпадающий список задач (не более 5)
+        if ($(this).val().length > 1) {
+            showSearchDropdownList($(this).val(), allTasks, 5);
+        } else {
+            $("#search_s").html("");
         }
     });
 
@@ -204,6 +246,11 @@ $(function() {
             $("#menu_datepicker").datepicker("option","range","");
         }
     });
+
+    //Скрываем модальное окно при нажатии на: затемненный фон / кнопку "готово" / клавишу "esc"
+    $("#mod_background").click(function() { $("#mod").hide(); });
+    $("#mod_w_ok").click(function() { $("#mod").hide(); });
+    $(document).keydown(function(e) { if (e.keyCode == 27) $("#mod").hide(); });
 
     //У меня не получилось напрямую из JS получить данные с сервера api, пытался долго и безрезультатно.
     //Единственный выход который я нашел, посылать запрос через php, там все оказалось без проблем.
