@@ -168,6 +168,9 @@ function showSearchDropdownList(request, source, limit) {
     $("#search_s").html("");
     for (let i = 0; i < list.length; i++) {
         let item = $("<div tabindex='0'>" + list[i]['name'] + "</div>")
+            .click(function() {
+                showModal(list, i);
+            })
             .keydown(function(e) {
                 if (e.keyCode == 40) { $(document.activeElement).next().focus(); }
                 if (e.keyCode == 38) { $(document.activeElement).prev().focus(); }
@@ -207,8 +210,8 @@ $(function() {
     });
 
     $("#search").on('input', function(e) {
-        //При вводе в поисковую строку более одного символа, показываем выпадающий список задач (не более 5)
-        if ($(this).val().length > 1) {
+        //При вводе в поисковую строку, показываем выпадающий список задач (не более 5)
+        if ($(this).val().length > 0) {
             showSearchDropdownList($(this).val(), allTasks, 5);
         } else {
             $("#search_s").html("");
